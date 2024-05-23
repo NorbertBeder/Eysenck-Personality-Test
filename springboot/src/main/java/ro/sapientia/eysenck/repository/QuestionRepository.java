@@ -1,0 +1,9 @@
+package ro.sapientia.eysenck.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import ro.sapientia.eysenck.models.Question;
+
+@Repository
+public interface QuestionRepository extends JpaRepository<Question, Long> {
+}

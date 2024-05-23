@@ -1,0 +1,4 @@
+axios
+bootstrap
+react-router-dom
+jwt-decode

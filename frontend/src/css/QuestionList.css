@@ -1,0 +1,59 @@
+.question-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+}
+
+.question-list ul {
+  list-style-type: none;
+  border: 3px solid #ddd;
+  border-radius: 5px;
+}
+
+ul {
+  margin-top: 40px;
+}
+
+.question-list input[type="radio"] {
+  margin-right: 9px;
+}
+
+.question-text{
+  font-size: 26px;
+}
+
+.answer-label{
+  margin-left: 40px;
+  font-size: 22px;
+}
+
+.question-list input[type="radio"] {
+  width: 20px; 
+  height: 20px; 
+  border: 2px solid #ccc;
+  border-radius: 50%; 
+}
+
+.submit-button {
+  font-size: 50px;
+}
+
+.next-button {
+  font-size: 50px;
+}
+
+.submit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.next-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.question-container.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
