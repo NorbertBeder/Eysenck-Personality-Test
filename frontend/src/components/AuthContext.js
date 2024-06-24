@@ -1,6 +1,9 @@
 import React, { createContext, useState, useEffect } from 'react';
+import axios from 'axios';
+import { SERVER_URL } from "./constant";
 
-const AuthContext = createContext();
+
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [login, setLogin] = useState(null);
@@ -20,16 +23,27 @@ export const AuthProvider = ({ children }) => {
     }
   }, [login]);
 
+
   const handleLogin = (userObject) => {
     setLogin({
       email: userObject.email,
-      picture: userObject.picture,
+      picture: userObject.profilePictureUrl,
       name: userObject.name
     });
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setLogin(null);
+
+    try {
+      await axios.get(SERVER_URL + '/logout', { 
+        withCredentials: true 
+      });
+
+      localStorage.removeItem('login');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
 
   return (

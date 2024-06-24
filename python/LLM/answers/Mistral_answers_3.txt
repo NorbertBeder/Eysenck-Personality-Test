@@ -31,7 +31,7 @@
 31  NO
 32  NO
 33  NO
-34  YES or NO.
+34  YES
 35  NO
 36  Yes.
 37  Yes.

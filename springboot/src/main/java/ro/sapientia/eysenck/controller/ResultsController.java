@@ -1,31 +1,27 @@
 package ro.sapientia.eysenck.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ro.sapientia.eysenck.models.ResponseText;
 import ro.sapientia.eysenck.models.User;
-import ro.sapientia.eysenck.services.ResponseService;
 import ro.sapientia.eysenck.services.ResultsService;
 import ro.sapientia.eysenck.services.UserService;
 import ro.sapientia.eysenck.models.ResultDTO;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/v1")
-@CrossOrigin("https://dnx1w3861mokj.cloudfront.net")
-public class ResponseController {
-    private final ResponseService responseService;
+public class ResultsController {
     private final UserService userService;
-
     private final ResultsService resultsService;
 
-    public ResponseController(ResponseService responseService, UserService userService, ResultsService resultsService) {
-        this.responseService = responseService;
+
+
+    public ResultsController(UserService userService, ResultsService resultsService) {
         this.userService = userService;
         this.resultsService = resultsService;
     }
@@ -43,6 +39,7 @@ public class ResponseController {
             User user = userService.createUser(tempUser.getBirthYear(), tempUser.getGender(), tempUser.getEmail());
             id = user.getId();
         }
+
         Map<String, Integer> categoryMap = new LinkedHashMap<>();
         categoryMap.put("extrovertizmus", 0);
         categoryMap.put("őszinteség", 0);
@@ -57,8 +54,7 @@ public class ResponseController {
             ResponseText responseText = (answer.equals("YES") ? ResponseText.YES : ResponseText.NO);
 
 
-            responseService.saveResponse(id, questionId, responseText, date);
-            responseService.evaluateResponse(categoryMap, questionId, responseText);
+            resultsService.evaluateResponses(categoryMap, questionId, responseText);
         }
         resultsService.saveResult(id,
                 categoryMap.get("extrovertizmus") != null ? categoryMap.get("extrovertizmus") : 0,
@@ -68,5 +64,19 @@ public class ResponseController {
                 date
         );
         return categoryMap;
+    }
+
+    @PostMapping("/dates")
+    public Map<String, List<Integer>> getResultsWithDates(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        Long userId = userService.getUserIdByEmail(email);
+        return resultsService.getResultMap(userId);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String runTimeExceptionHandler(RuntimeException e){
+        return e.getMessage();
     }
 }

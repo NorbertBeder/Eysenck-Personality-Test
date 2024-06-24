@@ -13,7 +13,6 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1")
-@CrossOrigin("https://dnx1w3861mokj.cloudfront.net")
 public class QuestionController {
     private final QuestionService questionService;
 
@@ -29,14 +28,6 @@ public class QuestionController {
     @RequestMapping("/questions/{questionId}")
     public Question getQuestion(@PathVariable("questionId") Long questionId){
         return questionService.getQuestionById(questionId);
-    }
-
-    @Autowired
-    private SecretsManagerServiceImpl secretsManagerService;
-
-    @GetMapping("/secret/{secretName}")
-    public String getSecret(@PathVariable String secretName) {
-        return secretsManagerService.getSecret(secretName);
     }
 
     @ResponseBody

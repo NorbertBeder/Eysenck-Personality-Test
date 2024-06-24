@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import '../css/QuestionList.css';
+import { SERVER_URL } from './constant';
 
 function QuestionList() {
   const navigate = useNavigate();
   const location = useLocation();
-
   const user = location.state?.user;
-
+  
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [categoryMap, setCategoryMap] = useState({});
@@ -21,14 +21,20 @@ function QuestionList() {
       }, 0);
     }, []);
 
+    
   const loadQuestions = async () => {
     try {
-      const result = await axios.get("https://eysenck-personality-test.com/api/v1/questions");
+        const response = await axios.get(SERVER_URL + "/questions", {
+          withCredentials: true
+        });
+        if (response.request.responseURL !== SERVER_URL + "/questions") {
+          document.location = response.request.responseURL;
+      }
       const initialAnswers = {};
-      result.data.forEach(question => {
+      response.data.forEach(question => {
         initialAnswers[question.id] = null;
       });
-      setQuestions(result.data);
+      setQuestions(response.data);
       setAnswers(initialAnswers);
     } catch (error) {
       console.error("Error loading questions:", error);
@@ -53,7 +59,9 @@ function QuestionList() {
       answers: { ...answers }
     };
     try {
-      await axios.post("https://eysenck-personality-test.com/api/v1/result", resultDTO)
+      await axios.post(SERVER_URL + "/result", resultDTO, {
+        withCredentials: true
+        })
         .then(response => {
           setCategoryMap(response.data);
           const data = { message: response.data, email: user.email };

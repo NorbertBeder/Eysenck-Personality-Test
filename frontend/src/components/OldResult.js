@@ -2,6 +2,7 @@ import React, { useState, useEffect} from 'react';
 import { useLocation } from 'react-router-dom';
 import '../css/Result.css';
 import axios from 'axios';
+import { SERVER_URL } from "./constant";
 
 const OldResult = () => {
   const location = useLocation();
@@ -20,21 +21,27 @@ const OldResult = () => {
     }, []);
 
   const fetchResults = async () => {
+    const requestBody = {
+      email: email
+    };
     try {
-        const response = await axios.get(`https://eysenck-personality-test.com/api/v1/dates?email=${email}`);
+        const response = await axios.post(SERVER_URL + '/dates', requestBody, {
+          withCredentials: true
+        });
+    
         const data = response.data;
         const dateKeys = Object.keys(data).sort().reverse();
         setDates(dateKeys);
-
+    
         const initialDate = dateKeys[0];
         setSelectedDate(initialDate);
         setSelectedAnswers(data[initialDate]);
-
-        setAnswers(data)
-    } catch (error) {
-      console.error("Error fetching response dates:", error);
-    }
-  };
+    
+        setAnswers(data);
+      } catch (error) {
+        console.error("Error fetching response dates:", error);
+      }
+    };
 
   const handleDateChange = (e) => {
     const selectedDate = e.target.value;

@@ -1,0 +1,2 @@
+export const SERVER_URL = 'ADD_SERVER_URL'
+export const GOOGLE_URL = 'ADD_GOOGLE_LOGIN_URL'
