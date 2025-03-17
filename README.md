@@ -1,5 +1,5 @@
-The topic of my thesis is the development of an Eysenck Personality Test web appli-
-cation and the comparison of individuals and Large Language Models based on repeated administrations.
+The topic of my thesis is the development of an Eysenck Personality Test web application and
+the comparison of individuals and Large Language Models based on repeated administrations.
 
 Human personality is the phenomenon that makes us unique. Each person has a
 different personality, and while there may be similar personalities, no two people are
